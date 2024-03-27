@@ -1,6 +1,6 @@
 -- Prepares a MySQL server for the HBNB.
--- A db hbtn_dev_db
-CREATE DATABASE IF NOT EXISTS 'hbtn_dev_db';
+-- A db hbnb_dev_db
+CREATE DATABASE IF NOT EXISTS 'hbnb_dev_db';
 
 -- A new user hbnb_dev (in localhost)
 -- Password for hbnbn dev called hbnb_dev_pwd
