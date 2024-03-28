@@ -114,7 +114,6 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class"""
         if not args:
             print("** class name missing **")
             return
@@ -125,17 +124,15 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[class_name]()
-       
+
         if params:
             for param in params:
                 # turns string into keyargument
                 key, value = param.split('=')
                 if type(eval(value)) is str:
                     setattr(new_instance, key, eval(value).replace("_", " "))
-                elif type(eval(value)) in [int, float]: 
-                    setattr(new_instance, key, eval(value)) 
-
-        storage.save()
+                elif type(eval(value)) in [int, float]:
+                    setattr(new_instance, key, eval(value))
 
         print(new_instance.id)
         storage.save()
@@ -294,7 +291,7 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] != ' ':
+            if not att_name and args[0] == ' ':
                 att_name = args[0]
             # check for quoted val arg
             if args[2] and args[2][0] == '\"':
