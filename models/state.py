@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from models.city import City
-from models import storage
+import models
 
 
 class State(BaseModel, Base):
@@ -18,7 +18,7 @@ class State(BaseModel, Base):
     def cities(self):
         """Returns City instances where state_id equals to the
         current State.id"""
-        storageObjects = storage.all()
+        storageObjects = models.storage.all()
         cityObjects = [obj for obj in storageObjects.values() if key.split()[0] == "City"]
         citySameID = [key for key in cityObjects if key.state_id == self.id]
         return citySameID
