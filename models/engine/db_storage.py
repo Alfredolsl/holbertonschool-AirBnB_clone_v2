@@ -25,7 +25,7 @@ class DBStorage:
         db = getenv("HBNB_MYSQL_DB")
         env = getenv("HBNB_ENV")
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
                                       .format(user, password, host, db), pool_pre_ping=True)
 
         if env == "test":
@@ -35,14 +35,14 @@ class DBStorage:
         """Returns a dictionary"""
         queryDict = {}
         if cls:
-            query = DBStorage.__session.query(cls)
+            query = self.__session.query(cls)
             for elem in query:
                 key = "{}.{}".format(type(elem).__name__, elem.id)
                 queryDict[key] = elem
         else:
            allClasses = [State, City, User, Place, Review, Amenity]
            for cls in allClasses:
-               query = DBStorage.__session.query(cls)
+               query = self.__session.query(cls)
                for elem in query:
                    key = "{}.{}".format(type(elem).__name__, elem.id)
                    queryDict[key] = elem
@@ -50,15 +50,15 @@ class DBStorage:
 
     def new(self, obj):
         """adds a new element to the table"""
-        DBStorage.__session.add(obj)
+        self.__session.add(obj)
 
     def save(self):
         """saves changes to the table"""
-        DBStorage.__session.commit()
+        self.__session.commit()
 
     def delete(self, obj=None):
         if obj:
-            DBStorage.__session.delete(obj)
+            self.__session.delete(obj)
 
     def reload(self):
         """Creates the current session from the db engine."""
@@ -69,4 +69,4 @@ class DBStorage:
         # scoped_session produces a managed registry of Session objects (thread safety)
         # threads manage user requests and db operations.
         Session = scoped_session(currentSession)
-        DBStorage.__session = Session()
+        self.__session = Session()
