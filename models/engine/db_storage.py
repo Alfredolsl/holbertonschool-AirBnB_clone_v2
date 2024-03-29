@@ -2,7 +2,6 @@
 """Representation of a database storage for HBNB project."""
 from os import getenv
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base, BaseModel
 from models.state import State
@@ -37,22 +36,28 @@ class DBStorage:
     def all(self, cls=None):
         """Returns a dictionary"""
         dictionary = {}
+        print("Querying db...")
+
         if cls:
             if type(cls) is str:
                 cls = eval(cls)
+
+            print("Class object:", cls)
 
             query = self.__session.query(cls)
             for elem in query:
                 key = "{}.{}".format(type(elem).__name__, elem.id)
                 dictionary[key] = elem
         else:
-            class_list = [State, City, User, Place, Review, Amenity]
+            class_list = [State, City]
             for cls in class_list:
+                print("Class object:", cls)
                 query = self.__session.query(cls)
                 for elem in query:
                     key = "{}.{}".format(type(elem).__name__, elem.id)
-                    dic[key] = elem
+                    dictionary[key] = elem
 
+        print("Returning dict:", dictionary)
         return dictionary
 
     def new(self, obj):

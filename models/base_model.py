@@ -17,13 +17,12 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instantiates a BaseModel object"""
-        from models import storage
         if kwargs:
             for key, val in kwargs.items():
                 if key == "created_at" or key == "updated_at":
                     value = datetime.strptime(val, "%Y-%m-%dT%H:%M:%S.%f")
-                if key != "__class__":
-                    setattr(self, key, val)
+                    if key != "__class__":
+                        setattr(self, key, val)
             if "id" not in kwargs:
                 self.id = str(uuid.uuid4())
             if "created_at" not in kwargs:
@@ -35,7 +34,7 @@ class BaseModel:
             self.created_at = self.updated_at = datetime.now()
         
         # !! WE NEED THIS LINE TO SAVE INTO THE JSON !!
-        storage.new(self)
+        # storage.new(self)
         
         #if not kwargs:
         #    from models import storage

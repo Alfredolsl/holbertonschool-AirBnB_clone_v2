@@ -17,11 +17,20 @@ class State(BaseModel, Base):
     @property
     def cities(self):
         """Getter attribute, returns a list"""
+        from models import storage
+        #my_list = []
+        #extracted_cities = storage.all(City).values()
+        #for city in extracted_cities:
+        #    if self.id == city.state_id:
+        #        my_list.append(city)
+        #print("list of cities:", my_list)
+        #return my_list
+
         all_objects = models.storage.all()
         filtered_cities = []
 
         for key, val in all_objects.items():
             if "City" in key:
                 filtered_cities.append(key[val])
-
+        print("got cities")
         return [city for city in filtered_cities if city.state_id == self.id]

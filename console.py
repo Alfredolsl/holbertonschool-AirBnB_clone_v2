@@ -222,9 +222,8 @@ class HBNBCommand(cmd.Cmd):
         else:
             for k, v in storage.all().items():
                 print_list.append(str(v))
-        print(print_list)
-        #print_list = []
 
+        print(print_list)
         #if args:
         #    args = args.split(' ')[0]  # remove possible trailing args
         #    if args not in HBNBCommand.classes:
