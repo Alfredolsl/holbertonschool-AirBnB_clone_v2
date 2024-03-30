@@ -19,3 +19,16 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
+    reviews = relationship("Review", backref="place", cascade="all, delete")
+
+    
+    @property
+    def reviews(self):
+        """Getter attribute for reviews.
+        Returns list of Review instances if
+        place_id is equal to current Place.id"""
+        from models import storage
+        extracted_reviews = storage.all("Review").values()
+        filtered_reviews = [review for review in extracted_reviews
+                            if review.place_id == self.id]
+        return filtered_reviews
