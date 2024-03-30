@@ -49,7 +49,7 @@ class Place(BaseModel, Base):
         from models import storage
         extracted_amenities = storage.all("Amenity").values()
         filtered_amenities = [amenity for amenity in extracted_amenities
-                              if amenity.amenity_ids == self.id]
+                              if amenity.amenity_id == self.id]
         return filtered_amenities
 
     @amenities.setter
