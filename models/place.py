@@ -25,6 +25,7 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float)
     longitude = Column(Float)
+    amenity_ids = []
     reviews = relationship("Review", backref="place", cascade="all, delete")
     amenities = relationship("Amenity", secondary=place_amenity,
                              viewonly=False)
@@ -57,6 +58,6 @@ class Place(BaseModel, Base):
         """amenities setter attribute.
         Handles append method for adding
         and Amenity.id to the attribute
-        amenity_ids"""
+        amenity_id"""
         if isinstance(obj, "Amenity"):
-            self.amenity_id.append(obj.id)
+            self.amenity_ids.append(obj.id)
