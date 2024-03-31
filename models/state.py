@@ -18,12 +18,12 @@ class State(BaseModel, Base):
     def cities(self):
         """Getter attribute, returns a list"""
         from models import storage
-        #my_list = []
-        #extracted_cities = storage.all(City).values()
-        #for city in extracted_cities:
+        # my_list = []
+        # extracted_cities = storage.all(City).values()
+        # for city in extracted_cities:
         #    if self.id == city.state_id:
         #        my_list.append(city)
-        #return my_list
+        # return my_list
 
         all_objects = models.storage.all()
         filtered_cities = []
