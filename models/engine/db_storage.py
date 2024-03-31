@@ -47,7 +47,7 @@ class DBStorage:
                 key = "{}.{}".format(type(elem).__name__, elem.id)
                 dictionary[key] = elem
         else:
-            class_list = [State, City, User]
+            class_list = [State, City, User, Place, Review, Amenity]
             for cls in class_list:
                 query = self.__session.query(cls)
                 for elem in query:
