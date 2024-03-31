@@ -11,7 +11,6 @@ place_amenity = Table("place_amenity", Base.metadata,
                              ForeignKey("amenities.id"),
                              primary_key=True, nullable=False))
 
-
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = "places"
@@ -46,11 +45,7 @@ class Place(BaseModel, Base):
         """Getter attribute for amenities.
         Returns list of Amenity instances if
         amenity_ids linked to the Place."""
-        from models import storage
-        extracted_amenities = storage.all("Amenity").values()
-        filtered_amenities = [amenity for amenity in extracted_amenities
-                              if amenity.amenity_id == self.id]
-        return filtered_amenities
+        return self.amenity_ids
 
     @amenities.setter
     def amenities(self, obj):
