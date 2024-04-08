@@ -4,6 +4,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
+
 # Define a route with variable
 @app.route("/", strict_slashes=False)
 def hello_world():

@@ -31,5 +31,6 @@ def c(text):
     # Uses text variable from the route.
     return "C {}".format(text.replace("_", " "))
 
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
