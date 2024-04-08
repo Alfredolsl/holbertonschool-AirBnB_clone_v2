@@ -24,8 +24,10 @@ def hbnb():
     return "HBNB"
 
 
-@app.route("/c/<text>")
+@app.route("/c/<text>", strict_slashes=False)
 def c(text):
+    """Displays 'C' followed by the value
+    of the text variable."""
     # Uses text variable from the route.
     return "C {}".format(text.replace("_", " "))
 
