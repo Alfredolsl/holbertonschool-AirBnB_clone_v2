@@ -79,3 +79,8 @@ class DBStorage:
         # Threads manage user requests and db operations
         Session = scoped_session(current_session)
         self.__session = Session()
+
+    def close(self):
+        """Removes current session"""
+        self.__session.remove()
+        self.__session.close()
