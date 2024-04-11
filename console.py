@@ -155,17 +155,6 @@ class HBNBCommand(cmd.Cmd):
         print(new_instance.id)
         storage.save()
 
-        #if params:
-        #    for param in params:
-        #        # turns string into keyargument
-        #        key, value = param.split('=')
-        #        if type(eval(value)) is str:
-        #            setattr(new_instance, key, eval(value).replace("_", " "))
-        #        elif type(eval(value)) in [int, float]:
-        #            setattr(new_instance, key, eval(value))
-
-        #print(new_instance.id)
-        #new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
