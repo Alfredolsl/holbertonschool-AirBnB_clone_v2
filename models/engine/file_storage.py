@@ -58,7 +58,7 @@ class FileStorage:
         """Deletes specified obj from __objects"""
         if obj:
             key = "{}.{}".format(type(obj).__name__, obj.id)
-            self.__object.pop(key, None)
+            del self.__objects[key]
         else:
             return
 
