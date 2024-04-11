@@ -3,7 +3,7 @@
 import cmd
 import sys
 from models.base_model import BaseModel
-from models.__init__ import storage
+from models import storage
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -120,23 +120,52 @@ class HBNBCommand(cmd.Cmd):
             return
         parser = args.split()
         class_name = parser[0]
-        params = parser[1:]
         if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[class_name]()
 
-        if params:
-            for param in params:
-                # turns string into keyargument
-                key, value = param.split('=')
-                if type(eval(value)) is str:
-                    setattr(new_instance, key, eval(value).replace("_", " "))
-                elif type(eval(value)) in [int, float]:
-                    setattr(new_instance, key, eval(value))
+        if len(parser) == 1:
+            print(new_instance.id)
+            storage.save()
+            return
 
+        params = parser[1:]
+        for param in params:
+            if "=" not in param:
+                continue
+            key, value = param.split("=", 1)
+
+            if value[0] == '"' and value[-1] == '"':
+                value = value[1:-1].replace('"', '\"').replace('_', ' ')
+            elif "." in value:
+                try:
+                    value = float(value)
+                except Exception:
+                    continue
+            else:
+                try:
+                    value = int(value)
+                except Exception:
+                    continue
+
+            setattr(new_instance, key, value)
+
+        storage.save()
         print(new_instance.id)
-        new_instance.save()
+        storage.save()
+
+        #if params:
+        #    for param in params:
+        #        # turns string into keyargument
+        #        key, value = param.split('=')
+        #        if type(eval(value)) is str:
+        #            setattr(new_instance, key, eval(value).replace("_", " "))
+        #        elif type(eval(value)) in [int, float]:
+        #            setattr(new_instance, key, eval(value))
+
+        #print(new_instance.id)
+        #new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
