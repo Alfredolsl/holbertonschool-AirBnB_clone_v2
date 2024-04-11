@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Table, Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
+from os import getenv
 
 place_amenity = Table("place_amenity", Base.metadata,
                       Column("place_id",
@@ -31,33 +32,53 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
-    reviews = relationship("Review", backref="place", cascade="all, delete")
-    amenities = relationship("Amenity", secondary=place_amenity,
-                             viewonly=False)
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        reviews = relationship("Review",
+                               backref="place",
+                               cascade="delete")
+        amenities = relationship("Amenity",
+                                 secondary="place_amenity",
+                                 backref="places",
+                                 viewonly=False)
+    else:
+        @property
+        def reviews(self):
+            """Getter attribute for reviews.
+            Returns list of Review instances if
+            place_id is equal to current Place.id"""
+            from models import storage
+            from models.review import Review
+            extracted_reviews = storage.all(Review).values()
+            filtered_reviews = []
 
-    @property
-    def reviews(self):
-        """Getter attribute for reviews.
-        Returns list of Review instances if
-        place_id is equal to current Place.id"""
-        from models import storage
-        extracted_reviews = storage.all("Review").values()
-        filtered_reviews = [review for review in extracted_reviews
-                            if review.place_id == self.id]
-        return filtered_reviews
+            for review in extracted_reviews:
+                if review.state_id == self.id:
+                    filtered_reviews.append(review)
 
-    @property
-    def amenities(self):
-        """Getter attribute for amenities.
-        Returns list of Amenity instances if
-        amenity_ids linked to the Place."""
-        return self.amenity_ids
+            return filtered_reviews
 
-    @amenities.setter
-    def amenities(self, obj):
-        """amenities setter attribute.
-        Handles append method for adding
-        and Amenity.id to the attribute
-        amenity_id"""
-        if isinstance(obj, "Amenity"):
-            self.amenity_ids.append(obj.id)
+        @property
+        def amenities(self):
+            """Getter attribute for amenities.
+            Returns list of Amenity instances if
+            amenity_ids linked to the Place."""
+            from models import storage
+            from models.amenity import Amenity
+            extracted_amenities = storage.all(Amenity).values()
+            amenity_list = []
+
+            for amenity in extracted_amenities:
+                if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
+            
+            return amenity_list
+
+        @amenities.setter
+        def amenities(self, obj):
+            """amenities setter attribute.
+            Handles append method for adding
+            and Amenity.id to the attribute
+            amenity_id"""
+            from models.amenity import Amenity
+            if type(obj) is Amenity:
+                self.amenity_ids.append(obj.id)
