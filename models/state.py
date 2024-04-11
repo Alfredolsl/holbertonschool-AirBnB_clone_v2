@@ -12,14 +12,16 @@ class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", cascade="all, delete, delete-orphan",
-                          backref="state")
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        cities = relationship("City", cascade="all, delete, delete-orphan",
+                              backref="state")
 
-    if getenv("HBNB_ENV") == "file":
+    else:
         @property
         def cities(self):
             """Getter attribute, returns a list"""
             from models import storage
+            from models.city import City
             my_list = []
             extracted_cities = storage.all(City).values()
             for city in extracted_cities:
