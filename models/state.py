@@ -25,14 +25,6 @@ class State(BaseModel, Base):
             my_list = []
             extracted_cities = storage.all(City).values()
             for city in extracted_cities:
-               if self.id == city.state_id:
-                   my_list.append(city)
+                if self.id == city.state_id:
+                    my_list.append(city)
             return my_list
-
-            #all_objects = models.storage.all()
-            #filtered_cities = []
-
-            #for key, val in all_objects.items():
-            #    if "City" in key:
-            #        filtered_cities.append(key[val])
-            #return [city for city in filtered_cities if city.state_id == self.id]
