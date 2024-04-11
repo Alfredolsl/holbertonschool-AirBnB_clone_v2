@@ -41,14 +41,14 @@ class DBStorage:
             if type(cls) is str:
                 cls = eval(cls)
 
-            query = self.__session.query(cls)
+            query = self.__session.query(cls).all()
             for elem in query:
-                key = "{}.{}".format(type(elem).__name__, elem.id)
+                key = "{}.{}".format(elem.__class__.__name__, elem.id)
                 dictionary[key] = elem
         else:
             class_list = [State, City, User, Place, Review, Amenity]
             for cls in class_list:
-                query = self.__session.query(cls)
+                query = self.__session.query(cls).all()
                 for elem in query:
                     key = "{}.{}".format(type(elem).__name__, elem.id)
                     dictionary[key] = elem
